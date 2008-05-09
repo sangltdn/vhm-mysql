@@ -1,5 +1,6 @@
 /*
  * LoginFrame.java
+ * Copyright (C) 2008 Jorge Schrauwen
  */
 package be.blackdot.ahm;
 

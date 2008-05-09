@@ -1,8 +1,6 @@
 /*
  * DAHosts.java
- *
- * Created on 17 april 2008, 9:55
- *
+ * Copyright (C) 2008 Jorge Schrauwen
  */
 package be.blackdot.ahm.dataaccess;
 
