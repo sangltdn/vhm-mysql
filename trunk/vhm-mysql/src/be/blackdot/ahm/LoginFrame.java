@@ -1,0 +1,181 @@
+/*
+ * LoginFrame.java
+ */
+package be.blackdot.ahm;
+
+/**
+ *
+ * @author sjorge
+ * @url http://www.blackdot.be
+ */
+import java.io.*;
+import java.util.*;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
+
+import be.blackdot.ahm.dataaccess.*;
+
+public class LoginFrame extends JFrame {
+
+    public DAHosts daHosts = null;
+    private Container workspace;
+    private JPanel panelBottom,  panelCenter,  panelLabels,  panelTexts;
+    private JLabel[] labelsConnect = new JLabel[4];
+    private JTextField[] textsConnect = new JTextField[3];
+    private JPasswordField textPassword;
+    private JButton buttonConnect;
+    private String[] strLabels = {"Host", "Database", "User", "Password"};
+
+    /** events */
+    class ConnectHandler implements ActionListener {
+
+        private String drv = "com.mysql.jdbc.Driver";
+        private String url = "jdbc:mysql://";
+        private String login;
+        private String password;
+        private LoginFrame parent;
+
+        public ConnectHandler(LoginFrame parent) {
+            this.parent = parent;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            if ((!textsConnect[0].getText().equals("")) &&
+                    (!textsConnect[1].getText().equals("")) &&
+                    (!textsConnect[2].getText().equals("")) &&
+                    (!String.valueOf(textPassword.getPassword()).equals(""))) {
+
+                login = textsConnect[2].getText();
+                password = String.valueOf(textPassword.getPassword());
+                url = String.format("jdbc:mysql://%s/%s", textsConnect[0].getText(), textsConnect[1].getText());
+
+                try {
+                    daHosts = (daHosts == null) ? new DAHosts(url, login, password, drv) : daHosts;
+                    new MainFrame(parent);
+                    setVisible(false);
+                } catch (com.mysql.jdbc.exceptions.jdbc4.CommunicationsException ex) {
+                    JOptionPane.showMessageDialog(
+                            workspace,
+                            "Error connecting to server!",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
+
+    class WindowHandler extends WindowAdapter {
+
+        @Override
+        public void windowClosing(WindowEvent e) {
+            CloseFrame();
+        }
+    }
+
+    /** methods */
+    public void CloseFrame() {
+        try {
+            if (daHosts != null) {
+                daHosts.close();
+            }
+        } catch (Exception err) {
+            JOptionPane.showMessageDialog(
+                    workspace,
+                    "Error closing database!",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        } finally {
+            System.exit(0);
+        }
+    }
+
+    /**
+     * Creates a new instance of LoginFrame
+     */
+    public LoginFrame() throws Exception {
+        //workspace
+        workspace = getContentPane();
+        workspace.setLayout(new BorderLayout());
+
+        //gui-elements
+        panelCenter = new JPanel(new BorderLayout());
+        panelCenter.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5));
+
+        panelLabels = new JPanel(new GridLayout(4, 1, 2, 2));
+        panelLabels.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
+        for (int i = 0; i < labelsConnect.length; i++) {
+            labelsConnect[i] = new JLabel(strLabels[i] + ": ");
+            panelLabels.add(labelsConnect[i]);
+        }
+
+        panelTexts = new JPanel(new GridLayout(4, 1, 2, 2));
+        for (int i = 0; i < textsConnect.length; i++) {
+            textsConnect[i] = new JTextField(10);
+            panelTexts.add(textsConnect[i]);
+        }
+        textPassword = new JPasswordField(10);
+        panelTexts.add(textPassword);
+
+        panelBottom = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonConnect = new JButton("Connect");
+
+        //events
+        buttonConnect.addActionListener(new ConnectHandler(this));
+
+        //get data 
+        File f = new File("connection.cfg");
+        if (f.exists()) {
+            BufferedReader cfg = new BufferedReader(new FileReader("connection.cfg"));
+            String cfgProperty;
+            while ((cfgProperty = cfg.readLine()) != null) {
+                String k, v;
+                k = cfgProperty.substring(0, cfgProperty.indexOf('='));
+                v = cfgProperty.substring(cfgProperty.indexOf('=') + 1);
+
+                if (k.equalsIgnoreCase("host")) {
+                    textsConnect[0].setText(v);
+                } else if (k.equalsIgnoreCase("database")) {
+                    textsConnect[1].setText(v);
+                } else if (k.equalsIgnoreCase("user")) {
+                    textsConnect[2].setText(v);
+                } else if (k.equalsIgnoreCase("password")) {
+                    textPassword.setText(v);
+                }
+            }
+        }
+        //gui-mergers
+        panelCenter.add(panelLabels, BorderLayout.WEST);
+        panelCenter.add(panelTexts, BorderLayout.CENTER);
+
+        panelBottom.add(buttonConnect);
+
+        workspace.add(panelCenter, BorderLayout.CENTER);
+        workspace.add(panelBottom, BorderLayout.SOUTH);
+
+        //JFrame
+        //setLocation(200,100);
+        setTitle("Virtual Host Manager");
+        setSize(250, 160);
+        setResizable(false);
+        setLocationRelativeTo(null);
+        setIconImage(new ImageIcon("images/host.png").getImage());
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        addWindowListener(new WindowHandler());
+        setVisible(true);
+    }
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        try {
+            new LoginFrame();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    }
