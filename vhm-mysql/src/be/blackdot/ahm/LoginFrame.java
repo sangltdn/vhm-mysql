@@ -49,8 +49,7 @@ public class LoginFrame extends JFrame {
         public void actionPerformed(ActionEvent e) {
             if ((!textsConnect[0].getText().equals("")) &&
                     (!textsConnect[1].getText().equals("")) &&
-                    (!textsConnect[2].getText().equals("")) &&
-                    (!String.valueOf(textPassword.getPassword()).equals(""))) {
+                    (!textsConnect[2].getText().equals(""))) {
 
                 login = textsConnect[2].getText();
                 password = String.valueOf(textPassword.getPassword());
@@ -60,14 +59,12 @@ public class LoginFrame extends JFrame {
                     daHosts = (daHosts == null) ? new DAHosts(url, login, password, drv) : daHosts;
                     new MainFrame(parent);
                     setVisible(false);
-                } catch (com.mysql.jdbc.exceptions.jdbc4.CommunicationsException ex) {
+                } catch (Exception ex) {
                     JOptionPane.showMessageDialog(
                             workspace,
                             "Error connecting to server!",
                             "Error",
                             JOptionPane.ERROR_MESSAGE);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
                 }
             }
         }
@@ -178,6 +175,7 @@ public class LoginFrame extends JFrame {
      */
     public static void main(String[] args) {
         try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             new LoginFrame();
         } catch (Exception e) {
             e.printStackTrace();
