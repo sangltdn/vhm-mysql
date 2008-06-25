@@ -148,6 +148,7 @@ public class DAHosts {
             h.setConfiguration(getConfiguration(h.getId()));
             h.setEnabled(rs.getBoolean("enabled"));
             h.setWebdav(rs.getBoolean("webdav"));
+            h.setFtp(rs.getBoolean("ftp"));
             h.setCgi(rs.getBoolean("cgi"));
             h.setSsi(rs.getBoolean("ssi"));
             h.setPhp(rs.getBoolean("php"));
@@ -189,6 +190,7 @@ public class DAHosts {
                 h.setConfiguration(getConfiguration(h.getId()));
                 h.setEnabled(rs.getBoolean("enabled"));
                 h.setWebdav(rs.getBoolean("webdav"));
+                h.setFtp(rs.getBoolean("ftp"));
                 h.setCgi(rs.getBoolean("cgi"));
                 h.setSsi(rs.getBoolean("ssi"));
                 h.setPhp(rs.getBoolean("php"));
@@ -256,8 +258,8 @@ public class DAHosts {
     }
 
     public void updateHost(int id, boolean enabled,
-                            boolean webdav, boolean php,
-                            boolean ssi, boolean cgi) {
+            boolean webdav, boolean php,
+            boolean ssi, boolean cgi) {
 
         //SQL-Statement
         String sql = "UPDATE hosts SET enabled = ?, webdav = ?, cgi = ?, ssi = ?, php = ? WHERE id = ?;";
@@ -286,8 +288,8 @@ public class DAHosts {
     }
 
     public void createHost(String naam, boolean enabled,
-                            boolean webdav, boolean php,
-                            boolean ssi, boolean cgi) {
+            boolean webdav, boolean php,
+            boolean ssi, boolean cgi) {
 
         //SQL-Statement
         String sql = "INSERT INTO hosts VALUES(null, ?, ?, ?, ?, ?, ?);";
@@ -448,7 +450,7 @@ public class DAHosts {
     }
 
     public void createHostUser(int hostid, String user,
-                                String password, String groups) {
+            String password, String groups) {
 
         //SQL-Statement
         String sql = "INSERT INTO users VALUES(null, ?, ?, ?, ?);";
