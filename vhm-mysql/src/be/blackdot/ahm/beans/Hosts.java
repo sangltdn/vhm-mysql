@@ -18,6 +18,7 @@ public class Hosts {
     private String configuration;
     private boolean enabled;
     private boolean webdav;
+    private boolean ftp;
     private boolean cgi;
     private boolean ssi;
     private boolean php;
@@ -56,6 +57,14 @@ public class Hosts {
         this.webdav = webdav;
     }
 
+    public boolean isFtp() {
+        return ftp;
+    }
+
+    public void seFtp(boolean ftp) {
+        this.ftp = ftp;
+    }    
+    
     public boolean isCgi() {
         return cgi;
     }
