@@ -258,11 +258,11 @@ public class DAHosts {
     }
 
     public void updateHost(int id, boolean enabled,
-            boolean webdav, boolean php,
+            boolean webdav, boolean ftp, boolean php,
             boolean ssi, boolean cgi) {
 
         //SQL-Statement
-        String sql = "UPDATE hosts SET enabled = ?, webdav = ?, cgi = ?, ssi = ?, php = ? WHERE id = ?;";
+        String sql = "UPDATE hosts SET enabled = ?, webdav = ?, ftp = ?, cgi = ?, ssi = ?, php = ? WHERE id = ?;";
 
         //data access
         PreparedStatement stmt = null;
@@ -270,10 +270,11 @@ public class DAHosts {
             stmt = connection.prepareStatement(sql);
             stmt.setBoolean(1, enabled);
             stmt.setBoolean(2, webdav);
-            stmt.setBoolean(3, cgi);
-            stmt.setBoolean(4, ssi);
-            stmt.setBoolean(5, php);
-            stmt.setInt(6, id);
+            stmt.setBoolean(3, ftp);
+            stmt.setBoolean(4, cgi);
+            stmt.setBoolean(5, ssi);
+            stmt.setBoolean(6, php);
+            stmt.setInt(7, id);
             stmt.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -288,11 +289,11 @@ public class DAHosts {
     }
 
     public void createHost(String naam, boolean enabled,
-            boolean webdav, boolean php,
+            boolean webdav, boolean ftp, boolean php,
             boolean ssi, boolean cgi) {
 
         //SQL-Statement
-        String sql = "INSERT INTO hosts VALUES(null, ?, ?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO hosts VALUES(null, ?, ?, ?, ?, ?, ?, ?);";
 
         //data access
         PreparedStatement stmt = null;
@@ -301,9 +302,10 @@ public class DAHosts {
             stmt.setString(1, naam);
             stmt.setBoolean(2, enabled);
             stmt.setBoolean(3, webdav);
-            stmt.setBoolean(4, cgi);
-            stmt.setBoolean(5, ssi);
-            stmt.setBoolean(6, php);
+            stmt.setBoolean(4, ftp);
+            stmt.setBoolean(5, cgi);
+            stmt.setBoolean(6, ssi);
+            stmt.setBoolean(7, php);
             stmt.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
