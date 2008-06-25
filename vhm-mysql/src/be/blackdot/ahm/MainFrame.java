@@ -273,7 +273,7 @@ public class MainFrame extends JFrame {
             checkOptions[2].setSelected((h != null) ? h.isSsi() : false);
 
             checkServers[0].setSelected((h != null) ? h.isWebdav() : true);
-            checkServers[1].setSelected((h != null) ? h.isFtp() : true);
+            checkServers[1].setSelected((h != null) ? h.isFtp() : false);
 
             checkEnabled.setSelected((h != null) ? h.isEnabled() : true);
         }
