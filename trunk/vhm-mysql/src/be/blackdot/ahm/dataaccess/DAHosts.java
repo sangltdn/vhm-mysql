@@ -438,7 +438,7 @@ public class DAHosts {
      */
     public boolean updateHostCfg(int id, String cfg) {
         boolean r = deleteHostCfg(id);
-        if (!cfg.equals("") && r) {
+        if (!cfg.equals("")) {
             r = createHostCfg(id, cfg);
         }
 
