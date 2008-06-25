@@ -265,7 +265,7 @@ public class MainFrame extends JFrame {
         private JPasswordField textPass;
         private JList listUsers;
         private JScrollPane scrollUsers;
-        private String[] checkGroupStrings = {"WebDAV", "Admin", "Users"};
+        private String[] checkGroupStrings = {"Users", "Admin", "WebDAV", "FTP"};
         private JCheckBox[] checkGroups = new JCheckBox[checkGroupStrings.length];
 
         /** events */
@@ -296,10 +296,11 @@ public class MainFrame extends JFrame {
                     if (!textName.getText().equals("") && !(textPass.getPassword().length == 0)) {
                         String pass = getApachePassword(new String(textPass.getPassword()));
                         String groups = "";
-
+                        
+                        groups = (checkGroups[0].isSelected()) ? groups + "users," : groups;
                         groups = (checkGroups[1].isSelected()) ? groups + "admin," : groups;
-                        groups = (checkGroups[0].isSelected()) ? groups + "dav," : groups;
-                        groups = (checkGroups[2].isSelected()) ? groups + "users," : groups;
+                        groups = (checkGroups[2].isSelected()) ? groups + "dav," : groups;
+                        groups = (checkGroups[3].isSelected()) ? groups + "ftp," : groups;
                         if (!groups.equals("")) {
                             //remove trailing ,
                             groups = (groups.charAt(groups.length() - 1) == ',') ? groups.substring(0, groups.length() - 1) : groups;
@@ -320,6 +321,12 @@ public class MainFrame extends JFrame {
                                     "Error",
                                     JOptionPane.ERROR_MESSAGE);
                         }
+                    }else{
+                        JOptionPane.showMessageDialog(
+                                workspace,
+                                "Please select fill in username and password!",
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
@@ -337,11 +344,13 @@ public class MainFrame extends JFrame {
                     buttonAdd.setText("Add");
 
                     checkGroups[0].setSelected(
-                            (u.getGroups().indexOf("dav") > -1) ? true : false);
+                            (u.getGroups().indexOf("users") > -1) ? true : false);
                     checkGroups[1].setSelected(
                             (u.getGroups().indexOf("admin") > -1) ? true : false);
                     checkGroups[2].setSelected(
-                            (u.getGroups().indexOf("users") > -1) ? true : false);
+                            (u.getGroups().indexOf("dav") > -1) ? true : false);
+                    checkGroups[3].setSelected(
+                            (u.getGroups().indexOf("ftp") > -1) ? true : false);
 
                     buttonAdd.setEnabled(true);
                     buttonRemove.setEnabled(true);
@@ -444,11 +453,11 @@ public class MainFrame extends JFrame {
     class AliassesPanel extends JPanel {
 
         private int hostID = -1;
-        private JPanel panelAlias,  panelEdit;
-        private JPanel panelName,  panelAction;
+        private  JPanel panelAlias,   panelEdit ;
+        private  JPanel panelName,   panelAction ;
         private JLabel labelName;
         private JTextField textName;
-        private JButton buttonRemove,  buttonAdd;
+        private  JButton buttonRemove,   buttonAdd ;
         private JList listAlias;
         private JScrollPane scrollAlias;
 
