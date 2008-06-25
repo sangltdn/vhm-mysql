@@ -227,7 +227,6 @@ public class MainFrame extends JFrame {
             panelOptions = new JPanel(new GridLayout(checkOptions.length, 1));
             for (int i = 0; i < checkOptionText.length; i++) {
                 checkOptions[i] = new JCheckBox(checkOptionText[i]);
-                checkOptions[i].setSelected((i == 0) ? true : false);
                 panelOptions.add(checkOptions[i]);
             }
 
