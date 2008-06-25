@@ -608,6 +608,40 @@ public class DAHosts {
     }
 
     /**
+     * Update user
+     * 
+     * @param userid user id
+     * @param password password
+     * @param groups list of groups seperated by , 
+     * @return true if successful
+     */
+    public boolean updateHostUser(int userid, String password, String groups) {
+        //locals
+        boolean r = false;
+
+        //SQL-Statement
+        String sql = "UPDATE users SET password = ?, groups = ? WHERE id = ?;";
+
+        //data access
+        PreparedStatement stmt = null;
+        try {
+            stmt = connection.prepareStatement(sql);
+            stmt.setString(1, password);
+            stmt.setString(2, groups);
+            stmt.setInt(3, userid);
+            r = (stmt.executeUpdate() >= 1);
+
+            if (stmt != null) {
+                stmt.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            return r;
+        }
+    }
+
+    /**
      * Delete user by user id
      * 
      * @param userid unique id of user
