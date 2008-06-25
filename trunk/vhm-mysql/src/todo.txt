@@ -1,8 +1,6 @@
 general:
 - enter = default action
+- DAHosts return true/false on success
 
 user manager:
 - update groups for user
-
-host manager:
-- add ftp support

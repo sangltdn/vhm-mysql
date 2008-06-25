@@ -168,10 +168,11 @@ public class MainFrame extends JFrame {
                     if (!hostExists(textName.getText())) {
                         parent.daHosts.createHost(textName.getText().toLowerCase(),
                                 checkEnabled.isSelected(),
+                                checkServers[0].isSelected(),
+                                checkServers[1].isSelected(),
                                 checkOptions[0].isSelected(),
-                                checkOptions[1].isSelected(),
-                                checkOptions[3].isSelected(),
-                                checkOptions[2].isSelected());
+                                checkOptions[2].isSelected(),
+                                checkOptions[1].isSelected());
 
                         //set HostID
                         for (Hosts h : parent.daHosts.getHosts()) {
@@ -190,10 +191,11 @@ public class MainFrame extends JFrame {
                 } else {
                     parent.daHosts.updateHost(hostID,
                             checkEnabled.isSelected(),
+                            checkServers[0].isSelected(),
+                            checkServers[1].isSelected(),
                             checkOptions[0].isSelected(),
-                            checkOptions[1].isSelected(),
-                            checkOptions[3].isSelected(),
-                            checkOptions[2].isSelected());
+                            checkOptions[2].isSelected(),
+                            checkOptions[1].isSelected());
                 }
 
                 //update host list and select host
@@ -209,9 +211,9 @@ public class MainFrame extends JFrame {
             panelName = new JPanel(new FlowLayout(FlowLayout.LEFT));
             labelName = new JLabel("Host: ");
             textName = new JTextField(34);
-            
-            panelSettings = new JPanel(new GridLayout(1,2,5,5));
-            
+
+            panelSettings = new JPanel(new GridLayout(1, 2, 5, 5));
+
             panelOptionsBorder = new JPanel(new FlowLayout(FlowLayout.LEFT));
             panelOptionsBorder.setBorder(
                     BorderFactory.createTitledBorder(
@@ -256,8 +258,8 @@ public class MainFrame extends JFrame {
 
             panelSettings.add(panelServersBorder);
             panelSettings.add(panelOptionsBorder);
-            
-            
+
+
             add(panelName, BorderLayout.NORTH);
             add(panelSettings, BorderLayout.CENTER);
             add(panelAction, BorderLayout.SOUTH);
@@ -269,10 +271,13 @@ public class MainFrame extends JFrame {
             textName.setText((h != null) ? h.getName() : "");
             textName.setEditable((h != null) ? false : true);
 
-            checkOptions[0].setSelected((h != null) ? h.isWebdav() : true);
-            checkOptions[1].setSelected((h != null) ? h.isPhp() : false);
-            checkOptions[2].setSelected((h != null) ? h.isCgi() : false);
-            checkOptions[3].setSelected((h != null) ? h.isSsi() : false);
+            checkOptions[0].setSelected((h != null) ? h.isPhp() : false);
+            checkOptions[1].setSelected((h != null) ? h.isCgi() : false);
+            checkOptions[2].setSelected((h != null) ? h.isSsi() : false);
+
+            checkServers[0].setSelected((h != null) ? h.isWebdav() : true);
+            checkServers[1].setSelected((h != null) ? h.isFtp() : true);
+
             checkEnabled.setSelected((h != null) ? h.isEnabled() : true);
         }
     }
@@ -280,11 +285,11 @@ public class MainFrame extends JFrame {
     class UsersPanel extends JPanel {
 
         private int hostID = -1;
-        private JPanel panelUsers,  panelEdit;
-        private JPanel panelName,  panelPass,  panelGroups,  panelAction;
-        private JLabel labelName,  labelPass;
+        private  JPanel panelUsers,   panelEdit ;
+        private  JPanel panelName,   panelPass ,   panelGroups ,   panelAction ;
+        private  JLabel labelName,   labelPass ;
         private JTextField textName;
-        private JButton buttonRemove,  buttonAdd,  buttonSave;
+        private  JButton buttonRemove,   buttonAdd ,   buttonSave ;
         private JPasswordField textPass;
         private JList listUsers;
         private JScrollPane scrollUsers;
@@ -476,11 +481,11 @@ public class MainFrame extends JFrame {
     class AliassesPanel extends JPanel {
 
         private int hostID = -1;
-        private JPanel panelAlias,  panelEdit;
-        private JPanel panelName,  panelAction;
+        private  JPanel panelAlias,   panelEdit ;
+        private  JPanel panelName,   panelAction ;
         private JLabel labelName;
         private JTextField textName;
-        private JButton buttonRemove,  buttonAdd;
+        private  JButton buttonRemove,   buttonAdd ;
         private JList listAlias;
         private JScrollPane scrollAlias;
 
