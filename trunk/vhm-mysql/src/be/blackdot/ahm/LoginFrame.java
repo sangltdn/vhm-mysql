@@ -127,6 +127,7 @@ public class LoginFrame extends JFrame {
 
         //events
         buttonConnect.addActionListener(new ConnectHandler(this));
+        textPassword.addActionListener(new ConnectHandler(this));
 
         //get data 
         File f = new File("connection.cfg");
