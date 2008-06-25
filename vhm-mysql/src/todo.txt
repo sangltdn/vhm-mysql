@@ -1,0 +1,6 @@
+user manager:
+- update groups for user
+
+host manager:
+- split in groups (server, options)
+- add ftp
