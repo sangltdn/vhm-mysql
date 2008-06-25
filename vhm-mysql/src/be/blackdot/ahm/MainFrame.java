@@ -143,17 +143,21 @@ public class MainFrame extends JFrame {
     class GeneralPanel extends JPanel {
 
         private int hostID = -1;
-        private JPanel panelName,  panelOptions,  panelAction,  panelOptionsBorder;
+        private JPanel panelName,  panelOptions,  panelServers,  panelSettings,  panelAction,  panelOptionsBorder,  panelServersBorder;
         private JLabel labelName;
         private JTextField textName;
         private JButton buttonAdd;
         private String[] checkOptionText = {
-            "WebDAV",
             "PHP: Hypertext Preprocessor",
             "Scripts .cgi, .pl, cgi-bin",
             "Server Side Included"
         };
+        private String[] checkServerText = {
+            "WebDAV",
+            "FTP"
+        };
         private JCheckBox[] checkOptions = new JCheckBox[checkOptionText.length];
+        private JCheckBox[] checkServers = new JCheckBox[checkServerText.length];
         private JCheckBox checkEnabled;
 
         /** events */
@@ -205,18 +209,33 @@ public class MainFrame extends JFrame {
             panelName = new JPanel(new FlowLayout(FlowLayout.LEFT));
             labelName = new JLabel("Host: ");
             textName = new JTextField(34);
-
+            
+            panelSettings = new JPanel(new GridLayout(1,2,5,5));
+            
             panelOptionsBorder = new JPanel(new FlowLayout(FlowLayout.LEFT));
             panelOptionsBorder.setBorder(
                     BorderFactory.createTitledBorder(
                     BorderFactory.createEtchedBorder(),
                     " Options "));
 
+            panelServersBorder = new JPanel(new FlowLayout(FlowLayout.LEFT));
+            panelServersBorder.setBorder(
+                    BorderFactory.createTitledBorder(
+                    BorderFactory.createEtchedBorder(),
+                    " Servers "));
+
             panelOptions = new JPanel(new GridLayout(checkOptions.length, 1));
             for (int i = 0; i < checkOptionText.length; i++) {
                 checkOptions[i] = new JCheckBox(checkOptionText[i]);
                 checkOptions[i].setSelected((i == 0) ? true : false);
                 panelOptions.add(checkOptions[i]);
+            }
+
+            panelServers = new JPanel(new GridLayout(checkOptions.length, 1));
+            for (int i = 0; i < checkServerText.length; i++) {
+                checkServers[i] = new JCheckBox(checkServerText[i]);
+                checkServers[i].setSelected((i == 0) ? true : false);
+                panelServers.add(checkServers[i]);
             }
 
             panelAction = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -232,11 +251,16 @@ public class MainFrame extends JFrame {
             panelName.add(textName);
 
             panelOptionsBorder.add(panelOptions);
+            panelServersBorder.add(panelServers);
             panelAction.add(checkEnabled);
             panelAction.add(buttonAdd);
 
+            panelSettings.add(panelServersBorder);
+            panelSettings.add(panelOptionsBorder);
+            
+            
             add(panelName, BorderLayout.NORTH);
-            add(panelOptionsBorder, BorderLayout.CENTER);
+            add(panelSettings, BorderLayout.CENTER);
             add(panelAction, BorderLayout.SOUTH);
 
         }
