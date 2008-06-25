@@ -13,16 +13,13 @@ package be.blackdot.ahm;
  * @author sjorge
  * @url http://www.blackdot.be
  */
-import java.io.*;
 import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.table.*;
 import javax.swing.event.*;
 
 import be.blackdot.ahm.beans.*;
-import be.blackdot.ahm.dataaccess.*;
 
 public class MainFrame extends JFrame {
 
@@ -49,7 +46,7 @@ public class MainFrame extends JFrame {
     class HostRemoveHandler implements ActionListener {
 
         public void actionPerformed(ActionEvent e) {
-            Hosts h = (Hosts) listHosts.getSelectedValue();
+            Hosts h = (Hosts)listHosts.getSelectedValue();
             if (JOptionPane.showConfirmDialog(
                     workspace,
                     "Are you sure you want to remove '" + h.getName() + "'",
@@ -91,7 +88,7 @@ public class MainFrame extends JFrame {
     class HostHandler implements ListSelectionListener {
 
         public void valueChanged(ListSelectionEvent e) {
-            Hosts h = (Hosts) listHosts.getSelectedValue();
+            Hosts h = (Hosts)listHosts.getSelectedValue();
             panelGeneral.setHost(h);
             panelUsers.setHost(h);
             panelAliasses.setHost(h);
@@ -167,12 +164,12 @@ public class MainFrame extends JFrame {
                 if (textName.isEditable()) {
                     if (!hostExists(textName.getText())) {
                         parent.daHosts.createHost(textName.getText().toLowerCase(),
-                                checkEnabled.isSelected(),
-                                checkServers[0].isSelected(),
-                                checkServers[1].isSelected(),
-                                checkOptions[0].isSelected(),
-                                checkOptions[2].isSelected(),
-                                checkOptions[1].isSelected());
+                                                  checkEnabled.isSelected(),
+                                                  checkServers[0].isSelected(),
+                                                  checkServers[1].isSelected(),
+                                                  checkOptions[0].isSelected(),
+                                                  checkOptions[2].isSelected(),
+                                                  checkOptions[1].isSelected());
 
                         //set HostID
                         for (Hosts h : parent.daHosts.getHosts()) {
@@ -190,12 +187,12 @@ public class MainFrame extends JFrame {
                     }
                 } else {
                     parent.daHosts.updateHost(hostID,
-                            checkEnabled.isSelected(),
-                            checkServers[0].isSelected(),
-                            checkServers[1].isSelected(),
-                            checkOptions[0].isSelected(),
-                            checkOptions[2].isSelected(),
-                            checkOptions[1].isSelected());
+                                              checkEnabled.isSelected(),
+                                              checkServers[0].isSelected(),
+                                              checkServers[1].isSelected(),
+                                              checkOptions[0].isSelected(),
+                                              checkOptions[2].isSelected(),
+                                              checkOptions[1].isSelected());
                 }
 
                 //update host list and select host
@@ -285,11 +282,11 @@ public class MainFrame extends JFrame {
     class UsersPanel extends JPanel {
 
         private int hostID = -1;
-        private  JPanel panelUsers,   panelEdit ;
-        private  JPanel panelName,   panelPass ,   panelGroups ,   panelAction ;
-        private  JLabel labelName,   labelPass ;
+        private JPanel panelUsers,  panelEdit;
+        private JPanel panelName,  panelPass,  panelGroups,  panelAction;
+        private JLabel labelName,  labelPass;
         private JTextField textName;
-        private  JButton buttonRemove,   buttonAdd ,   buttonSave ;
+        private JButton buttonRemove,  buttonNew,  buttonSave;
         private JPasswordField textPass;
         private JList listUsers;
         private JScrollPane scrollUsers;
@@ -300,7 +297,7 @@ public class MainFrame extends JFrame {
         class UserRemoveHandler implements ActionListener {
 
             public void actionPerformed(ActionEvent e) {
-                Users u = (Users) listUsers.getSelectedValue();
+                Users u = (Users)listUsers.getSelectedValue();
                 if (JOptionPane.showConfirmDialog(
                         workspace,
                         "Are you sure you want to remove '" + u.getName() + "'",
@@ -318,26 +315,25 @@ public class MainFrame extends JFrame {
         class UserAddHandler implements ActionListener {
 
             public void actionPerformed(ActionEvent e) {
-                if (e.getActionCommand().equals("Add")) {
-                    listUsers.clearSelection(); //UserHandler will return null
-                } else {
-                    if (!textName.getText().equals("") && !(textPass.getPassword().length == 0)) {
-                        String pass = getApachePassword(new String(textPass.getPassword()));
-                        String groups = "";
+                Users u = null;
+                String pass = new String(textPass.getPassword());
+                String groups = "";
 
-                        groups = (checkGroups[0].isSelected()) ? groups + "users," : groups;
-                        groups = (checkGroups[1].isSelected()) ? groups + "admin," : groups;
-                        groups = (checkGroups[2].isSelected()) ? groups + "dav," : groups;
-                        groups = (checkGroups[3].isSelected()) ? groups + "ftp," : groups;
-                        if (!groups.equals("")) {
-                            //remove trailing ,
-                            groups = (groups.charAt(groups.length() - 1) == ',') ? groups.substring(0, groups.length() - 1) : groups;
+                groups = (checkGroups[0].isSelected()) ? groups + "users," : groups;
+                groups = (checkGroups[1].isSelected()) ? groups + "admin," : groups;
+                groups = (checkGroups[2].isSelected()) ? groups + "dav," : groups;
+                groups = (checkGroups[3].isSelected()) ? groups + "ftp," : groups;
+                if (!groups.equals("")) {
+                    //remove trailing ,
+                    groups = (groups.charAt(groups.length() - 1) == ',') ? groups.substring(0, groups.length() - 1) : groups;
 
+                    if (e.getActionCommand().equals("Add")) {
+                        if (!textName.getText().equals("") && !pass.isEmpty()) {
                             //create user
                             parent.daHosts.createHostUser(hostID,
-                                    textName.getText(),
-                                    pass,
-                                    groups);
+                                                          textName.getText(),
+                                                          getApachePassword(pass),
+                                                          groups);
 
                             //update hosts
                             reloadHosts(hostID);
@@ -345,31 +341,43 @@ public class MainFrame extends JFrame {
                         } else {
                             JOptionPane.showMessageDialog(
                                     workspace,
-                                    "Please select atleast one group!",
+                                    "Please select fill in username and password!",
                                     "Error",
                                     JOptionPane.ERROR_MESSAGE);
                         }
                     } else {
-                        JOptionPane.showMessageDialog(
-                                workspace,
-                                "Please select fill in username and password!",
-                                "Error",
-                                JOptionPane.ERROR_MESSAGE);
+                        u = (Users)listUsers.getSelectedValue();
+                        parent.daHosts.updateHostUser(u.getId(), ((pass.isEmpty()) ? u.getPassword() : getApachePassword(pass)), groups);
+                        reloadHosts(hostID);
+                        reloadUsers(u.getId(), (Hosts)listHosts.getSelectedValue());
                     }
+                } else {
+                    JOptionPane.showMessageDialog(
+                            workspace,
+                            "Please select atleast one group!",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
                 }
+            }
+        }
+
+        class UserNewHandler implements ActionListener {
+
+            public void actionPerformed(ActionEvent e) {
+                listUsers.clearSelection(); //UserHandler will return null
+                buttonNew.setEnabled(false);
             }
         }
 
         class UserHandler implements ListSelectionListener {
 
             public void valueChanged(ListSelectionEvent e) {
-                Users u = (Users) listUsers.getSelectedValue();
+                Users u = (Users)listUsers.getSelectedValue();
                 if (u != null) {
                     textName.setText(u.getName());
                     textName.setEnabled(false);
                     textPass.setText("");
-                    textPass.setEnabled(false);
-                    buttonAdd.setText("Add");
+                    buttonSave.setText("Save");
 
                     checkGroups[0].setSelected(
                             (u.getGroups().indexOf("users") > -1) ? true : false);
@@ -380,19 +388,43 @@ public class MainFrame extends JFrame {
                     checkGroups[3].setSelected(
                             (u.getGroups().indexOf("ftp") > -1) ? true : false);
 
-                    buttonAdd.setEnabled(true);
+                    buttonNew.setEnabled(true);
                     buttonRemove.setEnabled(true);
                 } else {
                     textName.setText("");
                     textName.setEnabled(true);
                     textPass.setText("");
                     textPass.setEnabled(true);
-                    buttonAdd.setText("Save");
+                    buttonSave.setText("Add");
                     for (int i = 0; i < checkGroups.length; i++) {
                         checkGroups[i].setSelected((i == 0) ? true : false);
                     }
-                    buttonAdd.setEnabled(true);
+                    buttonNew.setEnabled(true);
                     buttonRemove.setEnabled(false);
+                }
+            }
+        }
+
+        /** methods */
+        public void setHost(Hosts h) {
+            hostID = (h != null) ? h.getId() : -1;
+            listUsers.clearSelection();
+            listUsers.setListData((h != null) ? h.getUsers() : new Vector());
+            buttonNew.setEnabled(false);
+            buttonSave.setEnabled(true);
+            buttonRemove.setEnabled(false);
+            textName.setText("");
+            textPass.setText("");
+        }
+
+        private void reloadUsers(int userID, Hosts h) {            
+            Vector<Users> uUpdate = (h != null) ? h.getUsers() : new Vector();
+            listUsers.setListData(uUpdate);
+
+            for (int i = 0; i < uUpdate.size(); i++) {
+                if (uUpdate.get(i).getId() == userID) {
+                    listUsers.setSelectedIndex(i);
+                    break;
                 }
             }
         }
@@ -408,8 +440,8 @@ public class MainFrame extends JFrame {
             listUsers = new JList();
 
             scrollUsers = new JScrollPane(listUsers,
-                    JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-                    JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+                                          JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                                          JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
             panelEdit = new JPanel(null);
 
@@ -433,13 +465,16 @@ public class MainFrame extends JFrame {
             }
 
             panelAction = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            buttonAdd = new JButton("Save");
+            buttonNew = new JButton("New");
+            buttonNew.setEnabled(false);
+            buttonSave = new JButton("Add");
             buttonRemove = new JButton("Remove");
             buttonRemove.setEnabled(false);
 
             //events
             listUsers.addListSelectionListener(new UserHandler());
-            buttonAdd.addActionListener(new UserAddHandler());
+            buttonNew.addActionListener(new UserNewHandler());
+            buttonSave.addActionListener(new UserAddHandler());
             buttonRemove.addActionListener(new UserRemoveHandler());
 
             //merger
@@ -458,7 +493,8 @@ public class MainFrame extends JFrame {
             panelGroups.setBounds(0, 51, 305, 50);
             panelEdit.add(panelGroups);
 
-            panelAction.add(buttonAdd);
+            panelAction.add(buttonNew);
+            panelAction.add(buttonSave);
             panelAction.add(buttonRemove);
             panelAction.setBounds(0, 100, 305, 35);
             panelEdit.add(panelAction);
@@ -466,26 +502,16 @@ public class MainFrame extends JFrame {
             add(panelUsers, BorderLayout.WEST);
             add(panelEdit, BorderLayout.CENTER);
         }
-
-        public void setHost(Hosts h) {
-            hostID = (h != null) ? h.getId() : -1;
-            listUsers.clearSelection();
-            listUsers.setListData((h != null) ? h.getUsers() : new Vector());
-            buttonAdd.setEnabled(true);
-            buttonRemove.setEnabled(false);
-            textName.setText("");
-            textPass.setText("");
-        }
     }
 
     class AliassesPanel extends JPanel {
 
         private int hostID = -1;
-        private  JPanel panelAlias,   panelEdit ;
-        private  JPanel panelName,   panelAction ;
+        private JPanel panelAlias,  panelEdit;
+        private JPanel panelName,  panelAction;
         private JLabel labelName;
         private JTextField textName;
-        private  JButton buttonRemove,   buttonAdd ;
+        private JButton buttonRemove,  buttonAdd;
         private JList listAlias;
         private JScrollPane scrollAlias;
 
@@ -493,7 +519,7 @@ public class MainFrame extends JFrame {
         class AliasRemoveHandler implements ActionListener {
 
             public void actionPerformed(ActionEvent e) {
-                Aliases a = (Aliases) listAlias.getSelectedValue();
+                Aliases a = (Aliases)listAlias.getSelectedValue();
                 if (JOptionPane.showConfirmDialog(
                         workspace,
                         "Are you sure you want to remove '" + a.getAlias() + "'",
@@ -537,7 +563,7 @@ public class MainFrame extends JFrame {
         class AliasHandler implements ListSelectionListener {
 
             public void valueChanged(ListSelectionEvent e) {
-                Aliases a = (Aliases) listAlias.getSelectedValue();
+                Aliases a = (Aliases)listAlias.getSelectedValue();
                 if (a != null) {
                     textName.setText(a.getAlias());
                     textName.setEnabled(false);
@@ -566,8 +592,8 @@ public class MainFrame extends JFrame {
             listAlias = new JList();
 
             scrollAlias = new JScrollPane(listAlias,
-                    JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-                    JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+                                          JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                                          JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
             panelEdit = new JPanel(null);
 
@@ -644,8 +670,8 @@ public class MainFrame extends JFrame {
             textCfg.setFont(new Font("monospaced", Font.PLAIN, 12));
 
             scrollCfg = new JScrollPane(textCfg,
-                    JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-                    JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                                        JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                                        JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
             panelAction = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             buttonSave = new JButton("Save");
@@ -714,8 +740,8 @@ public class MainFrame extends JFrame {
         panelHostActions.add(buttonHostRemove);
 
         panelListHosts.add(new JScrollPane(listHosts,
-                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
+                                           JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                                           JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
 
         panelWest.add(panelListHosts, BorderLayout.CENTER);
         panelWest.add(panelHostActions, BorderLayout.SOUTH);

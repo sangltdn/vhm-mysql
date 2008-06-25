@@ -1,5 +1,0 @@
-general:
-- enter = default action
-
-user manager:
-- update groups for user
