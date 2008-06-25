@@ -26,6 +26,12 @@ public class DAHosts {
         connection = DriverManager.getConnection(url, login, password);
     }
 
+    /**
+     * Retrieve the additional configuration code
+     * 
+     * @param host id of host
+     * @return configuration code as string
+     */
     private String getConfiguration(int host) {
         //SQL-Statement
         String sql = String.format("SELECT configuration FROM configuration WHERE id = %d;", host);
@@ -57,6 +63,12 @@ public class DAHosts {
         return cfg;
     }
 
+    /**
+     * Retrieve vector with users for host
+     * 
+     * @param host id of host
+     * @return vector of Users
+     */
     private Vector<Users> getUsers(int host) {
         //SQL-Statement
         String sql = String.format("SELECT * FROM users WHERE host = %d;", host);
@@ -96,6 +108,12 @@ public class DAHosts {
         return users;
     }
 
+    /**
+     * Retrieve vector with aliasses for host
+     * 
+     * @param host id of host
+     * @return vector of Aliasses
+     */
     private Vector<Aliases> getAliases(int host) {
         //SQL-Statement
         String sql = String.format("SELECT * FROM aliases WHERE id = %d;", host);
@@ -131,7 +149,13 @@ public class DAHosts {
         }
         return aliases;
     }
-
+    
+    /**
+     * Get Hosts object based on sql
+     * 
+     * @param sql sql to select host from
+     * @return Hosts object
+     */
     private Hosts getHostWithSQL(String sql) {
         //data access
         Statement stmt = null;
@@ -172,6 +196,11 @@ public class DAHosts {
         return h;
     }
 
+    /**
+     * Retrieve vector with all hosts
+     * 
+     * @return vector of Hosts
+     */
     public Vector<Hosts> getHosts() {
         //SQL-Statement
         String sql = "SELECT * FROM hosts;";
@@ -214,6 +243,12 @@ public class DAHosts {
         return resultaat;
     }
 
+    /**
+     * Retrieve host by id
+     * 
+     * @param host id of host
+     * @return Hosts object for host
+     */
     public Hosts getHost(int id) {
         //SQL-Statement
         String sql = String.format("SELECT * FROM hosts WHERE id = %d;", id);
@@ -221,6 +256,12 @@ public class DAHosts {
         return getHostWithSQL(sql);
     }
 
+    /**
+     * Retrieve host by name
+     * 
+     * @param name FQDN for host
+     * @return Hosts object for host
+     */
     public Hosts getHost(String name) {
         //SQL-Statement
         String sql = String.format("SELECT * FROM hosts WHERE name = '%s';", name);
@@ -228,6 +269,11 @@ public class DAHosts {
         return getHostWithSQL(sql);
     }
 
+    /**
+     * Returns host count
+     * 
+     * @return total number of hosts
+     */
     public int getHostCount() {
         //SQL-Statement
         String sql = "SELECT count(id) FROM hosts;";
@@ -257,6 +303,17 @@ public class DAHosts {
         return count;
     }
 
+    /**
+     * Update a host
+     * 
+     * @param id host id of host to update
+     * @param enabled true to enable host
+     * @param webdav true to activate webdav
+     * @param ftp true to activate ftp
+     * @param php allow php to be used
+     * @param ssi allow ssi to be used
+     * @param cgi allow cgi/perl to be used
+     */
     public void updateHost(int id, boolean enabled,
             boolean webdav, boolean ftp, boolean php,
             boolean ssi, boolean cgi) {
@@ -288,6 +345,17 @@ public class DAHosts {
         }
     }
 
+    /**
+     * Create a host
+     * 
+     * @param name FQDN for host
+     * @param enabled true to enable host
+     * @param webdav true to activate webdav
+     * @param ftp true to activate ftp
+     * @param php allow php to be used
+     * @param ssi allow ssi to be used
+     * @param cgi allow cgi/perl to be used
+     */
     public void createHost(String naam, boolean enabled,
             boolean webdav, boolean ftp, boolean php,
             boolean ssi, boolean cgi) {
@@ -319,6 +387,11 @@ public class DAHosts {
         }
     }
 
+    /**
+     * Delete host by id
+     * 
+     * @param id host id
+     */ 
     public void deleteHost(int id) {
 
         //SQL-Statement
@@ -350,6 +423,12 @@ public class DAHosts {
 
     }
 
+    /**
+     * Update additional configuration for host
+     * 
+     * @param id host id
+     * @param cfg additional configuration
+     */ 
     public void updateHostCfg(int id, String cfg) {
         deleteHostCfg(id);
         if (!cfg.equals("")) {
@@ -357,6 +436,12 @@ public class DAHosts {
         }
     }
 
+    /**
+     * Create additional configuration for host
+     * 
+     * @param id host id
+     * @param cfg additional configuration
+     */ 
     public void createHostCfg(int id, String cfg) {
 
         //SQL-Statement
@@ -381,6 +466,11 @@ public class DAHosts {
         }
     }
 
+    /**
+     * Delete additional configuration for host
+     * 
+     * @param id host id
+     */ 
     public void deleteHostCfg(int id) {
 
         //SQL-Statement
@@ -404,6 +494,12 @@ public class DAHosts {
         }
     }
 
+    /**
+     * Create alias for host
+     * 
+     * @param id host id
+     * @param alias FQDN of alias
+     */ 
     public void createHostAlias(int id, String alias) {
 
         //SQL-Statement
@@ -428,6 +524,11 @@ public class DAHosts {
         }
     }
 
+    /**
+     * Delete alias
+     * 
+     * @param alias FQDN of alias
+     */  
     public void deleteHostAlias(String alias) {
 
         //SQL-Statement
@@ -451,6 +552,14 @@ public class DAHosts {
         }
     }
 
+    /**
+     * Create user for host
+     * 
+     * @param hostid host id
+     * @param user username
+     * @param password password
+     * @param groups list of groups seperated by ,
+     */ 
     public void createHostUser(int hostid, String user,
             String password, String groups) {
 
@@ -478,6 +587,11 @@ public class DAHosts {
         }
     }
 
+    /**
+     * Delete user by user id
+     * 
+     * @param userid unique id of user
+     */  
     public void deleteHostUser(int userid) {
 
         //SQL-Statement
