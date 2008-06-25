@@ -149,7 +149,7 @@ public class DAHosts {
         }
         return aliases;
     }
-    
+
     /**
      * Get Hosts object based on sql
      * 
@@ -313,10 +313,14 @@ public class DAHosts {
      * @param php allow php to be used
      * @param ssi allow ssi to be used
      * @param cgi allow cgi/perl to be used
+     * @return true if successful
      */
-    public void updateHost(int id, boolean enabled,
-            boolean webdav, boolean ftp, boolean php,
-            boolean ssi, boolean cgi) {
+    public boolean updateHost(int id, boolean enabled,
+                              boolean webdav, boolean ftp, boolean php,
+                              boolean ssi, boolean cgi) {
+
+        //locals
+        boolean r = false;
 
         //SQL-Statement
         String sql = "UPDATE hosts SET enabled = ?, webdav = ?, ftp = ?, cgi = ?, ssi = ?, php = ? WHERE id = ?;";
@@ -332,16 +336,15 @@ public class DAHosts {
             stmt.setBoolean(5, ssi);
             stmt.setBoolean(6, php);
             stmt.setInt(7, id);
-            stmt.executeUpdate();
+            r = (stmt.executeUpdate() >= 1);
+
+            if (stmt != null) {
+                stmt.close();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                if (stmt != null) {
-                    stmt.close();
-                }
-            } catch (SQLException e) {
-            }
+            return r;
         }
     }
 
@@ -355,10 +358,14 @@ public class DAHosts {
      * @param php allow php to be used
      * @param ssi allow ssi to be used
      * @param cgi allow cgi/perl to be used
+     * @return true if successful
      */
-    public void createHost(String naam, boolean enabled,
-            boolean webdav, boolean ftp, boolean php,
-            boolean ssi, boolean cgi) {
+    public boolean createHost(String naam, boolean enabled,
+                              boolean webdav, boolean ftp, boolean php,
+                              boolean ssi, boolean cgi) {
+
+        //locals
+        boolean r = false;
 
         //SQL-Statement
         String sql = "INSERT INTO hosts VALUES(null, ?, ?, ?, ?, ?, ?, ?);";
@@ -374,16 +381,15 @@ public class DAHosts {
             stmt.setBoolean(5, cgi);
             stmt.setBoolean(6, ssi);
             stmt.setBoolean(7, php);
-            stmt.executeUpdate();
+            r = (stmt.executeUpdate() >= 1);
+
+            if (stmt != null) {
+                stmt.close();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                if (stmt != null) {
-                    stmt.close();
-                }
-            } catch (SQLException e) {
-            }
+            return r;
         }
     }
 
@@ -391,8 +397,11 @@ public class DAHosts {
      * Delete host by id
      * 
      * @param id host id
-     */ 
-    public void deleteHost(int id) {
+     * @return true if successful
+     */
+    public boolean deleteHost(int id) {
+        //locals
+        boolean r = false;
 
         //SQL-Statement
         String[] sql = {
@@ -408,19 +417,16 @@ public class DAHosts {
             try {
                 stmt = connection.prepareStatement(sql[i]);
                 stmt.setInt(1, id);
-                stmt.executeUpdate();
+                r = (stmt.executeUpdate() >= 1);
+
+                if (stmt != null) {
+                    stmt.close();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
-            } finally {
-                try {
-                    if (stmt != null) {
-                        stmt.close();
-                    }
-                } catch (SQLException e) {
-                }
             }
         }
-
+        return r;
     }
 
     /**
@@ -428,12 +434,15 @@ public class DAHosts {
      * 
      * @param id host id
      * @param cfg additional configuration
-     */ 
-    public void updateHostCfg(int id, String cfg) {
-        deleteHostCfg(id);
-        if (!cfg.equals("")) {
-            createHostCfg(id, cfg);
+     * @return true if successful
+     */
+    public boolean updateHostCfg(int id, String cfg) {
+        boolean r = deleteHostCfg(id);
+        if (!cfg.equals("") && r) {
+            r = createHostCfg(id, cfg);
         }
+
+        return r;
     }
 
     /**
@@ -441,8 +450,11 @@ public class DAHosts {
      * 
      * @param id host id
      * @param cfg additional configuration
-     */ 
-    public void createHostCfg(int id, String cfg) {
+     * @return true if successful
+     */
+    public boolean createHostCfg(int id, String cfg) {
+        //locals
+        boolean r = false;
 
         //SQL-Statement
         String sql = "INSERT INTO configuration VALUES(?, ?);";
@@ -453,16 +465,15 @@ public class DAHosts {
             stmt = connection.prepareStatement(sql);
             stmt.setInt(1, id);
             stmt.setString(2, cfg);
-            stmt.executeUpdate();
+            r = (stmt.executeUpdate() >= 1);
+
+            if (stmt != null) {
+                stmt.close();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                if (stmt != null) {
-                    stmt.close();
-                }
-            } catch (SQLException e) {
-            }
+            return r;
         }
     }
 
@@ -470,8 +481,11 @@ public class DAHosts {
      * Delete additional configuration for host
      * 
      * @param id host id
-     */ 
-    public void deleteHostCfg(int id) {
+     * @return true if successful
+     */
+    public boolean deleteHostCfg(int id) {
+        //locals
+        boolean r = false;
 
         //SQL-Statement
         String sql = "DELETE FROM configuration WHERE id = ? LIMIT 1;";
@@ -481,16 +495,15 @@ public class DAHosts {
         try {
             stmt = connection.prepareStatement(sql);
             stmt.setInt(1, id);
-            stmt.executeUpdate();
+            r = (stmt.executeUpdate() >= 1);
+
+            if (stmt != null) {
+                stmt.close();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                if (stmt != null) {
-                    stmt.close();
-                }
-            } catch (SQLException e) {
-            }
+            return r;
         }
     }
 
@@ -499,8 +512,11 @@ public class DAHosts {
      * 
      * @param id host id
      * @param alias FQDN of alias
-     */ 
-    public void createHostAlias(int id, String alias) {
+     * @return true if successful
+     */
+    public boolean createHostAlias(int id, String alias) {
+        //locals
+        boolean r = false;
 
         //SQL-Statement
         String sql = "INSERT INTO aliases VALUES(?, ?);";
@@ -511,16 +527,15 @@ public class DAHosts {
             stmt = connection.prepareStatement(sql);
             stmt.setInt(1, id);
             stmt.setString(2, alias);
-            stmt.executeUpdate();
+            r = (stmt.executeUpdate() >= 1);
+
+            if (stmt != null) {
+                stmt.close();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                if (stmt != null) {
-                    stmt.close();
-                }
-            } catch (SQLException e) {
-            }
+            return r;
         }
     }
 
@@ -528,8 +543,11 @@ public class DAHosts {
      * Delete alias
      * 
      * @param alias FQDN of alias
-     */  
-    public void deleteHostAlias(String alias) {
+     * @return true if successful
+     */
+    public boolean deleteHostAlias(String alias) {
+        //locals
+        boolean r = false;
 
         //SQL-Statement
         String sql = "DELETE FROM aliases WHERE alias = ? LIMIT 1;";
@@ -539,16 +557,15 @@ public class DAHosts {
         try {
             stmt = connection.prepareStatement(sql);
             stmt.setString(1, alias);
-            stmt.executeUpdate();
+            r = (stmt.executeUpdate() >= 1);
+
+            if (stmt != null) {
+                stmt.close();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                if (stmt != null) {
-                    stmt.close();
-                }
-            } catch (SQLException e) {
-            }
+            return r;
         }
     }
 
@@ -559,9 +576,12 @@ public class DAHosts {
      * @param user username
      * @param password password
      * @param groups list of groups seperated by ,
-     */ 
-    public void createHostUser(int hostid, String user,
-            String password, String groups) {
+     * @return true if successful
+     */
+    public boolean createHostUser(int hostid, String user,
+                                  String password, String groups) {
+        //locals
+        boolean r = false;
 
         //SQL-Statement
         String sql = "INSERT INTO users VALUES(null, ?, ?, ?, ?);";
@@ -574,16 +594,16 @@ public class DAHosts {
             stmt.setString(2, user);
             stmt.setString(3, password);
             stmt.setString(4, groups);
-            stmt.executeUpdate();
+            r = (stmt.executeUpdate() >= 1);
+
+
+            if (stmt != null) {
+                stmt.close();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                if (stmt != null) {
-                    stmt.close();
-                }
-            } catch (SQLException e) {
-            }
+            return r;
         }
     }
 
@@ -591,8 +611,11 @@ public class DAHosts {
      * Delete user by user id
      * 
      * @param userid unique id of user
-     */  
-    public void deleteHostUser(int userid) {
+     * @return true if successful
+     */
+    public boolean deleteHostUser(int userid) {
+        //locals
+        boolean r = false;
 
         //SQL-Statement
         String sql = "DELETE FROM users WHERE id = ? LIMIT 1;";
@@ -602,16 +625,15 @@ public class DAHosts {
         try {
             stmt = connection.prepareStatement(sql);
             stmt.setInt(1, userid);
-            stmt.executeUpdate();
+            r = (stmt.executeUpdate() >= 1);
+
+            if (stmt != null) {
+                stmt.close();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                if (stmt != null) {
-                    stmt.close();
-                }
-            } catch (SQLException e) {
-            }
+            return r;
         }
     }
 
