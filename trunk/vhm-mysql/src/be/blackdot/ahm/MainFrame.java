@@ -261,7 +261,7 @@ public class MainFrame extends JFrame {
         private JPanel panelName,  panelPass,  panelGroups,  panelAction;
         private JLabel labelName,  labelPass;
         private JTextField textName;
-        private JButton buttonRemove,  buttonAdd;
+        private JButton buttonRemove,  buttonAdd,  buttonSave;
         private JPasswordField textPass;
         private JList listUsers;
         private JScrollPane scrollUsers;
@@ -296,7 +296,7 @@ public class MainFrame extends JFrame {
                     if (!textName.getText().equals("") && !(textPass.getPassword().length == 0)) {
                         String pass = getApachePassword(new String(textPass.getPassword()));
                         String groups = "";
-                        
+
                         groups = (checkGroups[0].isSelected()) ? groups + "users," : groups;
                         groups = (checkGroups[1].isSelected()) ? groups + "admin," : groups;
                         groups = (checkGroups[2].isSelected()) ? groups + "dav," : groups;
@@ -321,7 +321,7 @@ public class MainFrame extends JFrame {
                                     "Error",
                                     JOptionPane.ERROR_MESSAGE);
                         }
-                    }else{
+                    } else {
                         JOptionPane.showMessageDialog(
                                 workspace,
                                 "Please select fill in username and password!",
@@ -453,11 +453,11 @@ public class MainFrame extends JFrame {
     class AliassesPanel extends JPanel {
 
         private int hostID = -1;
-        private  JPanel panelAlias,   panelEdit ;
-        private  JPanel panelName,   panelAction ;
+        private JPanel panelAlias,  panelEdit;
+        private JPanel panelName,  panelAction;
         private JLabel labelName;
         private JTextField textName;
-        private  JButton buttonRemove,   buttonAdd ;
+        private JButton buttonRemove,  buttonAdd;
         private JList listAlias;
         private JScrollPane scrollAlias;
 
