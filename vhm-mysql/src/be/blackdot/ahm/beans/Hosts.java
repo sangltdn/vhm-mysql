@@ -61,7 +61,7 @@ public class Hosts {
         return ftp;
     }
 
-    public void seFtp(boolean ftp) {
+    public void setFtp(boolean ftp) {
         this.ftp = ftp;
     }    
     
