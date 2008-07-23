@@ -445,11 +445,11 @@ public class MainFrame extends JFrame {
 
             panelEdit = new JPanel(null);
 
-            panelName = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+            panelName = new JPanel(new BorderLayout());
             labelName = new JLabel("Username: ");
             textName = new JTextField(20);
 
-            panelPass = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+            panelPass = new JPanel(new BorderLayout());
             labelPass = new JLabel("Password: ");
             textPass = new JPasswordField(20);
 
@@ -482,15 +482,15 @@ public class MainFrame extends JFrame {
 
             panelName.add(labelName, BorderLayout.WEST);
             panelName.add(textName, BorderLayout.CENTER);
-            panelName.setBounds(0, 0, 305, 30);
+            panelName.setBounds(5, 0, 295, 30);
             panelEdit.add(panelName);
 
             panelPass.add(labelPass, BorderLayout.WEST);
             panelPass.add(textPass, BorderLayout.CENTER);
-            panelPass.setBounds(0, 25, 305, 30);
+            panelPass.setBounds(5, 30, 295, 30);
             panelEdit.add(panelPass);
 
-            panelGroups.setBounds(0, 51, 305, 50);
+            panelGroups.setBounds(0, 56, 305, 50);
             panelEdit.add(panelGroups);
 
             panelAction.add(buttonNew);
