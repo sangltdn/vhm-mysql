@@ -453,7 +453,7 @@ public class MainFrame extends JFrame {
             labelPass = new JLabel("Password: ");
             textPass = new JPasswordField(20);
 
-            panelGroups = new JPanel(new GridLayout(1, checkGroupStrings.length));
+            panelGroups = new JPanel(new GridLayout(checkGroupStrings.length, 1));
             panelGroups.setBorder(
                     BorderFactory.createTitledBorder(
                     BorderFactory.createEtchedBorder(),
@@ -490,13 +490,13 @@ public class MainFrame extends JFrame {
             panelPass.setBounds(5, 30, 295, 30);
             panelEdit.add(panelPass);
 
-            panelGroups.setBounds(0, 56, 305, 50);
+            panelGroups.setBounds(0, 56, 305, 110);
             panelEdit.add(panelGroups);
 
             panelAction.add(buttonNew);
             panelAction.add(buttonSave);
             panelAction.add(buttonRemove);
-            panelAction.setBounds(0, 100, 305, 35);
+            panelAction.setBounds(0, 160, 305, 35);
             panelEdit.add(panelAction);
 
             add(panelUsers, BorderLayout.WEST);
