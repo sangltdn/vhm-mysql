@@ -145,7 +145,7 @@ public class MainFrame extends JFrame {
         private JTextField textName;
         private JButton buttonAdd;
         private String[] checkOptionText = {
-            "PHP: Hypertext Preprocessor",
+            "PHP",
             "Scripts .cgi, .pl, cgi-bin",
             "Server Side Included"
         };
@@ -205,7 +205,7 @@ public class MainFrame extends JFrame {
             setLayout(new BorderLayout());
 
             //gui elements
-            panelName = new JPanel(new FlowLayout(FlowLayout.LEFT));
+            panelName = new JPanel(new BorderLayout());
             labelName = new JLabel("Host: ");
             textName = new JTextField(34);
 
@@ -245,8 +245,8 @@ public class MainFrame extends JFrame {
             buttonAdd.addActionListener(new HostAddHandler());
 
             //merger
-            panelName.add(labelName);
-            panelName.add(textName);
+            panelName.add(labelName, BorderLayout.WEST);
+            panelName.add(textName, BorderLayout.CENTER);
 
             panelOptionsBorder.add(panelOptions);
             panelServersBorder.add(panelServers);
@@ -418,7 +418,7 @@ public class MainFrame extends JFrame {
         }
 
         private void reloadUsers(int userID, Hosts h) {            
-            Vector<Users> uUpdate = (h != null) ? h.getUsers() : new Vector();
+            Vector<Users> uUpdate = (h != null) ? h.getUsers() : new Vector<Users>();
             listUsers.setListData(uUpdate);
 
             for (int i = 0; i < uUpdate.size(); i++) {
