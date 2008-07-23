@@ -328,7 +328,7 @@ public class MainFrame extends JFrame {
                     groups = (groups.charAt(groups.length() - 1) == ',') ? groups.substring(0, groups.length() - 1) : groups;
 
                     if (e.getActionCommand().equals("Add")) {
-                        if (!textName.getText().equals("") && !pass.isEmpty()) {
+                        if (!textName.getText().equals("") && !pass.equals("")) {
                             //create user
                             parent.daHosts.createHostUser(hostID,
                                                           textName.getText(),
@@ -347,7 +347,7 @@ public class MainFrame extends JFrame {
                         }
                     } else {
                         u = (Users)listUsers.getSelectedValue();
-                        parent.daHosts.updateHostUser(u.getId(), ((pass.isEmpty()) ? u.getPassword() : getApachePassword(pass)), groups);
+                        parent.daHosts.updateHostUser(u.getId(), ((pass.equals("")) ? u.getPassword() : getApachePassword(pass)), groups);
                         reloadHosts(hostID);
                         reloadUsers(u.getId(), (Hosts)listHosts.getSelectedValue());
                     }
